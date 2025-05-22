@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
+
 function App() {
   //State for form inputs
   const [form, setForm] = useState({ date: "", time: "", location: "", note: "" });
@@ -11,9 +13,11 @@ function App() {
   //function to fetch all date entries from backend
   const fetchDates = async () => {
     try {
-      const res = await axios.get("/api/dates");
+      const res = await axios.get("http://localhost:5000/api/dates");
+      console.log("Fetched dates:", res.data);  // <- Add this
       setDates(res.data);
     } catch (err) {
+      console.error("Failed to fetch dates", err);
       alert("Failed to fetch dates");
     }
   };
@@ -22,9 +26,16 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/dates", form);  // Send POST request with form data
+      if (editingId) {
+        // Update existing entry
+        await axios.put(`http://localhost:5000/api/dates/${editingId}`, form);
+        setEditingId(null);
+      } else {
+        // Create new entry
+        await axios.post("http://localhost:5000/api/dates", form);
+      }
       setForm({ date: "", time: "", location: "", note: "" }); // Reset form
-      fetchDates(); // Refresh the dates list after adding new entry
+      fetchDates(); // Refresh list
     } catch {
       alert("Failed to save date");
     }
@@ -38,7 +49,7 @@ function App() {
    const handleDelete = async (id) => {
   if (!window.confirm("Delete this date?")) return;
   try {
-    await axios.delete(`/api/dates/${id}`);
+    await axios.delete(`"http://localhost:5000/api/dates"${id}`);
     fetchDates();
   } catch {
     alert("Failed to delete date");
