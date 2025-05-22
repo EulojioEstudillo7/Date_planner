@@ -28,4 +28,15 @@ app.get("/api/dates", async (req, res) => {
       res.status(500).json({ message: "Server error" });
     }
   });
+//this is the route for adding a new date
+app.post("/api/dates", async (req, res) => {
+    try {
+      const newDate = new DateModel(req.body);
+      const savedDate = await newDate.save();
+      res.status(201).json(savedDate);
+    } catch (err) {
+      res.status(400).json({ message: "Invalid input" });
+    }
+  });
 
+  
