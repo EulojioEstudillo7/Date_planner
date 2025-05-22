@@ -11,9 +11,7 @@ const DateModel = require("./models/Date");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
 // This is the Middleware 
 app.use(cors());
 app.use(express.json());
@@ -44,4 +42,25 @@ app.post("/api/dates", async (req, res) => {
     }
   });
 
+  //This will update an entry
+app.put("/api/dates/:id", async (req, res) => {
+  try {
+    const updated = await DateModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ message: "Failed to update date" });
+  }
+});
 
+//This will delete an entry
+app.delete("/api/dates/:id", async (req, res) => {
+  try {
+    await DateModel.findByIdAndDelete(req.params.id);
+    res.json({ message: "Date deleted" });
+  } catch (err) {
+    res.status(400).json({ message: "Failed to delete date" });
+  }
+});
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
