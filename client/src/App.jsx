@@ -49,7 +49,7 @@ function App() {
    const handleDelete = async (id) => {
   if (!window.confirm("Delete this date?")) return;
   try {
-    await axios.delete(`"http://localhost:5000/api/dates"${id}`);
+    await axios.delete(`http://localhost:5000/api/dates/${id}`);
     fetchDates();
   } catch {
     alert("Failed to delete date");
@@ -110,8 +110,8 @@ function App() {
         {dates.map((d) => (
           <li key={d._id} className="border p-2 my-2">
             <strong>{d.date} at {d.time}</strong><br />
-            📍 {d.location}<br />
-            📝 {d.note}<br />
+             {d.location}<br />
+             {d.note}<br />
             <div className="mt-2 flex gap-2">
               <button onClick={() => handleEdit(d)} className="text-blue-600 underline">
                 Edit
