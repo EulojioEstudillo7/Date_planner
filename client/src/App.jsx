@@ -21,24 +21,24 @@ function App() {
       alert("Failed to fetch dates");
     }
   };
-
-  //form submit handler to add a new date entry
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        // Update existing entry
-        await axios.put(`http://localhost:5000/api/dates/${editingId}`, form);
-        setEditingId(null);
-      } else {
-        // Create new entry
-        await axios.post("http://localhost:5000/api/dates", form);
-      }
-      setForm({ date: "", time: "", location: "", note: "" }); // Reset form
-      fetchDates(); // Refresh list
-    } catch {
-      alert("Failed to save date");
+ //form submit handler to add a new date entry
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (editingId) {
+      // Update existing entry
+      await axios.put(`http://localhost:5000/api/dates/${editingId}`, form);
+      setEditingId(null);
+    } else {
+      // Create new entry
+      await axios.post("http://localhost:5000/api/dates", form);
     }
+    setForm({ date: "", time: "", location: "", note: "" }); // Reset form
+    fetchDates(); // Refresh list
+  } catch {
+    alert("Failed to save date");
+  }
+ 
   };
   // Load a date into the form for editing
   const handleEdit = (entry) => {
